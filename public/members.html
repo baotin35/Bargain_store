@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>👥 Members</h1>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Member</button>
+      </div>
+
+      <div class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="name" onclick="sortBy('name')">Name</th>
+                <th class="sortable" data-sort="phone" onclick="sortBy('phone')">Phone</th>
+                <th class="sortable" data-sort="tier" onclick="sortBy('tier')">Tier</th>
+                <th class="sortable" data-sort="points" onclick="sortBy('points')">Points</th>
+                <th class="sortable" data-sort="balance" onclick="sortBy('balance')">Balance Owed</th>
+                <th class="sortable" data-sort="creditLimit" onclick="sortBy('creditLimit')">Credit Limit</th>
+                <th class="sortable" data-sort="joinDate" onclick="sortBy('joinDate')">Join Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="mem-tbody">
+              <tr><td colspan="8" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="mem-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Add Member</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="mem-form">
+        <input type="hidden" id="mem-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input class="form-control" type="text" id="f-name" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input class="form-control" type="text" id="f-phone" placeholder="Phone number">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-control" type="email" id="f-email" placeholder="Email address">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input class="form-control" type="text" id="f-address" placeholder="Address">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Birthday</label>
+            <input class="form-control" type="date" id="f-birthday">
+          </div>
+          <div class="form-group">
+            <label>Credit Limit ($)</label>
+            <input class="form-control" type="number" id="f-credit-limit" min="0" step="0.01" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Balance Owed ($)</label>
+          <input class="form-control" type="number" id="f-balance" min="0" step="0.01" value="0">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Purchase History Modal -->
+  <div class="modal-overlay" id="history-modal">
+    <div class="modal" style="max-width:680px;">
+      <div class="modal-header">
+        <span class="modal-title" id="history-title">Purchase History</span>
+        <button class="modal-close" onclick="closeHistory()">✕</button>
+      </div>
+      <div id="history-summary" style="display:flex;gap:16px;margin-bottom:16px;"></div>
+      <div class="table-wrap" style="max-height:400px;overflow-y:auto;">
+        <table>
+          <thead>
+            <tr><th>Invoice</th><th>Date</th><th>Items</th><th>Total</th><th>Payment</th><th></th></tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr><td colspan="6" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/members.js"></script>
+</body>
+</html>

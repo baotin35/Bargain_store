@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+node-runtime/
+
+# Data files (Excel DB — keep locally, exclude from repo)
+data/*.xlsx
+
+# Environment / secrets
+.env
+*.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoices — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+
+      <!-- ── LIST VIEW (default) ── -->
+      <div id="list-view">
+        <div class="page-header">
+          <h1>🧾 Invoices</h1>
+          <div class="flex gap-2">
+            <div class="search-bar">
+              <input class="form-control" type="text" id="inv-search" placeholder="Search invoice # or customer...">
+            </div>
+            <a href="checkout.html" class="btn btn-primary">+ New Sale</a>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="sortable" data-sort="invoiceNo" onclick="sortBy('invoiceNo')">Invoice #</th>
+                  <th class="sortable" data-sort="date" onclick="sortBy('date')">Date</th>
+                  <th class="sortable" data-sort="memberName" onclick="sortBy('memberName')">Customer</th>
+                  <th class="sortable" data-sort="total" onclick="sortBy('total')">Total</th>
+                  <th class="sortable" data-sort="discount" onclick="sortBy('discount')">Discount</th>
+                  <th class="sortable" data-sort="paymentMethod" onclick="sortBy('paymentMethod')">Payment</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="inv-list-tbody">
+                <tr><td colspan="7" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAIL VIEW (shown when ?id= is present) ── -->
+      <div id="detail-view" style="display:none;">
+        <div class="page-header no-print">
+          <h1>🧾 Invoice</h1>
+          <div class="flex gap-2">
+            <a href="invoice.html" class="btn btn-outline">← All Invoices</a>
+            <button class="btn btn-outline" onclick="window.print()">🖨️ Print</button>
+            <a href="checkout.html" class="btn btn-primary">+ New Sale</a>
+          </div>
+        </div>
+
+        <div class="invoice-page" id="invoice-content">
+          <div id="invoice-loading" class="text-center" style="padding:40px;color:#aaa;">Loading invoice...</div>
+          <div id="invoice-body" style="display:none;">
+            <div class="invoice-header">
+              <div>
+                <h2 style="color:#1a237e;font-size:1.5rem;">🏪 Mom and Pop</h2>
+              </div>
+              <div class="invoice-meta">
+                <h2 id="inv-number">—</h2>
+                <p id="inv-date">—</p>
+              </div>
+            </div>
+
+            <div style="margin-bottom:20px;">
+              <strong>Bill To:</strong>
+              <p id="inv-member">Walk-in Customer</p>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Barcode</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th class="text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="inv-items"></tbody>
+              </table>
+            </div>
+
+            <div class="invoice-totals" style="margin-top:16px;">
+              <table>
+                <tr><td>Subtotal</td><td id="inv-subtotal">—</td></tr>
+                <tr><td>Discount</td><td id="inv-discount">—</td></tr>
+                <tr><td>Tax</td><td id="inv-tax">—</td></tr>
+                <tr class="grand"><td>TOTAL</td><td id="inv-total">—</td></tr>
+                <tr><td>Amount Paid</td><td id="inv-paid">—</td></tr>
+                <tr><td>Change</td><td id="inv-change">—</td></tr>
+              </table>
+            </div>
+
+            <div style="margin-top:32px;text-align:center;color:#aaa;font-size:0.85rem;">
+              Thank you for shopping with us!
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+  <script src="js/api.js"></script>
+  <script src="js/invoice.js"></script>
+</body>
+</html>

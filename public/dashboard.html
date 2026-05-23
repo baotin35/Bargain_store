@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>📊 Dashboard</h1>
+        <span id="today-date" style="color:#888;font-size:0.9rem;"></span>
+      </div>
+
+      <div class="cards-row">
+        <div class="card">
+          <div class="card-label">Sales Today</div>
+          <div class="card-value success" id="sales-today">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Total Sales</div>
+          <div class="card-value" id="total-sales">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Transactions</div>
+          <div class="card-value" id="total-tx">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Accounts Payable</div>
+          <div class="card-value danger" id="total-payables">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Accounts Receivable</div>
+          <div class="card-value warning" id="total-receivables">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Low Stock Items</div>
+          <div class="card-value danger" id="low-stock-count">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Avg Profit Margin</div>
+          <div class="card-value" id="avg-margin">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Inventory Value (Cost)</div>
+          <div class="card-value" id="inv-value">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Low-Margin Products</div>
+          <div class="card-value warning" id="low-margin-count">—</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Recent Transactions</span>
+          <a href="checkout.html" class="btn btn-primary btn-sm">+ New Sale</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="invoiceNo" onclick="txSortBy('invoiceNo')">Invoice #</th>
+                <th class="sortable" data-sort="date" onclick="txSortBy('date')">Date</th>
+                <th class="sortable" data-sort="total" onclick="txSortBy('total')">Total</th>
+                <th class="sortable" data-sort="amountPaid" onclick="txSortBy('amountPaid')">Paid</th>
+                <th class="sortable" data-sort="change" onclick="txSortBy('change')">Change</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="tx-tbody">
+              <tr><td colspan="6" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Low Stock Alerts</span>
+          <a href="inventory.html" class="btn btn-outline btn-sm">Manage Inventory</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Barcode</th><th>Product</th><th>Category</th><th>Stock</th><th>Unit</th></tr>
+            </thead>
+            <tbody id="low-stock-tbody">
+              <tr><td colspan="5" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

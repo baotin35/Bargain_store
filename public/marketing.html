@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>📣 Marketing & Promotions</h1>
+        <button class="btn btn-primary" onclick="printFlyer()">🖨️ Print Weekly Flyer</button>
+      </div>
+
+      <!-- Summary cards -->
+      <div class="cards-row">
+        <div class="card">
+          <div class="card-label">Member Sales</div>
+          <div class="card-value success" id="member-total">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Walk-in Sales</div>
+          <div class="card-value" id="walkin-total">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">New Members This Month</div>
+          <div class="card-value" id="new-members">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">At-Risk Customers</div>
+          <div class="card-value danger" id="at-risk-count">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Slow-Moving Items</div>
+          <div class="card-value warning" id="slow-count">—</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Birthdays This Week</div>
+          <div class="card-value" id="bday-count">—</div>
+        </div>
+      </div>
+
+      <!-- Slow Movers + Listing Generator -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">📦 Slow-Moving Items — Post to Sell</span>
+          <span style="font-size:0.82rem;color:#888;">High stock, sold ≤2 units in last 30 days</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Sold/30d</th><th>Suggested Price</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="slow-tbody">
+              <tr><td colspan="7" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Listing Preview Modal -->
+      <div class="modal-overlay" id="listing-modal">
+        <div class="modal" style="max-width:600px;">
+          <div class="modal-header">
+            <span class="modal-title">📋 Generated Listing</span>
+            <button class="modal-close" onclick="closeListing()">✕</button>
+          </div>
+          <div style="margin-bottom:12px;display:flex;gap:8px;">
+            <button class="btn btn-primary btn-sm" onclick="openFB()">📘 Open FB Marketplace</button>
+            <button class="btn btn-warning btn-sm" onclick="openCL()">📌 Open Craigslist</button>
+            <button class="btn btn-outline btn-sm" onclick="copyListing()">📋 Copy Text</button>
+          </div>
+          <textarea id="listing-text" style="width:100%;height:260px;font-size:0.9rem;padding:12px;border:1.5px solid #ddd;border-radius:8px;font-family:inherit;line-height:1.6;" readonly></textarea>
+          <div style="margin-top:10px;padding:10px;background:#fff8e1;border-radius:6px;font-size:0.82rem;color:#795548;">
+            💡 <strong>How to post:</strong> Click "Open FB Marketplace" or "Craigslist", paste this text into the listing description, set the price shown, add a product photo, and submit.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <!-- Top Customers -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">🏆 Top 5 Customers</span>
+            <span style="font-size:0.8rem;color:#888;">by total spend</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Customer</th><th>Tier</th><th>Points</th><th>Total Spent</th></tr></thead>
+              <tbody id="top-customers"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Revenue by Category -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">📊 Revenue by Category</span>
+          </div>
+          <div id="cat-chart" style="padding:16px 20px;"></div>
+        </div>
+
+        <!-- Popular Products -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">🔥 Best-Selling Products</span>
+            <span style="font-size:0.8rem;color:#888;">by units sold</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Product</th><th>Category</th><th>Units Sold</th><th>Revenue</th></tr></thead>
+              <tbody id="top-products"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- At-Risk Customers -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">⚠️ At-Risk Customers</span>
+            <span style="font-size:0.8rem;color:#888;">no visit in 30+ days</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Customer</th><th>Phone</th><th>Last Visit</th><th>Days Away</th><th></th></tr></thead>
+              <tbody id="at-risk"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Birthday This Week -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">🎂 Birthdays This Week</span>
+            <span style="font-size:0.8rem;color:#888;">send a promo!</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Member</th><th>Phone</th><th>Birthday</th><th>Action</th></tr></thead>
+              <tbody id="bday-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SMS Templates -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">📱 Quick SMS Templates</span>
+            <span style="font-size:0.8rem;color:#888;">click to copy</span>
+          </div>
+          <div style="padding:16px;" id="sms-templates"></div>
+        </div>
+
+      </div>
+
+      <!-- Weekly Flyer (hidden, print only) -->
+      <div id="weekly-flyer" style="display:none;">
+        <div style="text-align:center;border-bottom:3px solid #1a237e;padding-bottom:12px;margin-bottom:16px;">
+          <h1 style="color:#1a237e;margin:0;">🏪 Mom and Pop</h1>
+          <h2 style="margin:4px 0;color:#333;">🏷️ This Week's Best Deals</h2>
+          <p style="color:#888;margin:0;" id="flyer-date"></p>
+        </div>
+        <div id="flyer-items" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;"></div>
+        <div style="text-align:center;margin-top:20px;color:#888;font-size:0.85rem;">
+          Visit us today! While supplies last. Prices subject to CA 10% sales tax.
+        </div>
+      </div>
+
+      <!-- Promo Ideas -->
+      <div class="panel" style="margin-top:20px;">
+        <div class="panel-header"><span class="panel-title">💡 Promotion Strategy for Your Store</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding:20px;">
+          <div style="background:#e8f5e9;border-radius:10px;padding:16px;">
+            <div style="font-weight:700;margin-bottom:6px;">📱 Text Your Regulars</div>
+            <p style="font-size:0.85rem;color:#444;margin:0;">Use the <strong>At-Risk list</strong> — call or text customers who haven't visited in 30+ days with a personal deal. A simple "Hey Maria, 10% off this weekend — we miss you!" works great for small stores.</p>
+          </div>
+          <div style="background:#e3f2fd;border-radius:10px;padding:16px;">
+            <div style="font-weight:700;margin-bottom:6px;">🎂 Birthday Specials</div>
+            <p style="font-size:0.85rem;color:#444;margin:0;">Check <strong>Birthdays This Week</strong> daily. Text members a birthday discount — "Happy Birthday! Enjoy 15% off your next visit this week." Costs nothing, builds massive loyalty.</p>
+          </div>
+          <div style="background:#fff3e0;border-radius:10px;padding:16px;">
+            <div style="font-weight:700;margin-bottom:6px;">📦 Post Slow Items Daily</div>
+            <p style="font-size:0.85rem;color:#444;margin:0;">Use the <strong>Slow-Moving Items</strong> list above. Post 2–3 items on FB Marketplace and Craigslist every morning. Takes 5 minutes and clears stuck inventory fast.</p>
+          </div>
+          <div style="background:#fce4ec;border-radius:10px;padding:16px;">
+            <div style="font-weight:700;margin-bottom:6px;">🖨️ Weekly Flyer</div>
+            <p style="font-size:0.85rem;color:#444;margin:0;">Click <strong>"Print Weekly Flyer"</strong> above — it auto-picks your slow movers and generates a printable flyer. Post it on your door, hand it to neighbors, or photograph it for social media.</p>
+          </div>
+          <div style="background:#f3e5f5;border-radius:10px;padding:16px;">
+            <div style="font-weight:700;margin-bottom:6px;">🥇 Push Tier Upgrades</div>
+            <p style="font-size:0.85rem;color:#444;margin:0;">When a member is close to a tier, tell them at checkout: <strong>"You're only 50 points from Gold — that's 10% off every purchase!"</strong> The app shows their points automatically.</p>
+          </div>
+          <div style="background:#e0f7fa;border-radius:10px;padding:16px;">
+            <div style="font-weight:700;margin-bottom:6px;">⭐ Google Reviews</div>
+            <p style="font-size:0.85rem;color:#444;margin:0;">After every transaction, tell happy customers: <strong>"A quick Google review would mean the world to us!"</strong> Even 10 good reviews dramatically increases foot traffic from search.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/marketing.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accounts Receivable — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>💰 Accounts Receivable</h1>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Receivable</button>
+      </div>
+
+      <div class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="memberName" onclick="sortBy('memberName')">Member</th>
+                <th class="sortable" data-sort="description" onclick="sortBy('description')">Description</th>
+                <th class="sortable" data-sort="amount" onclick="sortBy('amount')">Amount</th>
+                <th class="sortable" data-sort="dueDate" onclick="sortBy('dueDate')">Due Date</th>
+                <th class="sortable" data-sort="status" onclick="sortBy('status')">Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rec-tbody">
+              <tr><td colspan="6" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="rec-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Add Receivable</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="rec-form">
+        <input type="hidden" id="rec-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Member</label>
+            <select class="form-control" id="f-member-id" required>
+              <option value="">Select member...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Amount ($)</label>
+            <input class="form-control" type="number" id="f-amount" min="0" step="0.01" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input class="form-control" type="text" id="f-description" placeholder="What is this for?">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Due Date</label>
+            <input class="form-control" type="date" id="f-due-date">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" id="f-status">
+              <option value="unpaid">Unpaid</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" id="paid-date-group" style="display:none;">
+          <label>Date Paid</label>
+          <input class="form-control" type="date" id="f-paid-date">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/receivables.js"></script>
+</body>
+</html>

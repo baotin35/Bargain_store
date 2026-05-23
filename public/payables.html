@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accounts Payable — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>💸 Accounts Payable</h1>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Payable</button>
+      </div>
+
+      <div class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="supplier" onclick="sortBy('supplier')">Supplier</th>
+                <th class="sortable" data-sort="description" onclick="sortBy('description')">Description</th>
+                <th class="sortable" data-sort="amount" onclick="sortBy('amount')">Amount</th>
+                <th class="sortable" data-sort="dueDate" onclick="sortBy('dueDate')">Due Date</th>
+                <th class="sortable" data-sort="status" onclick="sortBy('status')">Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="pay-tbody">
+              <tr><td colspan="6" class="text-center" style="padding:24px;color:#aaa;">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="pay-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">Add Payable</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="pay-form">
+        <input type="hidden" id="pay-id">
+        <div class="form-group">
+          <label>Supplier</label>
+          <input class="form-control" type="text" id="f-supplier" placeholder="Supplier name" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input class="form-control" type="text" id="f-description" placeholder="What is this for?">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Amount ($)</label>
+            <input class="form-control" type="number" id="f-amount" min="0" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label>Due Date</label>
+            <input class="form-control" type="date" id="f-due-date">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control" id="f-status">
+            <option value="unpaid">Unpaid</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
+        <div class="form-group" id="paid-date-group" style="display:none;">
+          <label>Date Paid</label>
+          <input class="form-control" type="date" id="f-paid-date">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/payables.js"></script>
+</body>
+</html>

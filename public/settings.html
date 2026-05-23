@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>⚙️ Settings</h1>
+        <span id="save-status" style="font-size:0.9rem;color:#2e7d32;display:none;">✅ Saved!</span>
+      </div>
+
+      <!-- Email Settings -->
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header">
+          <span class="panel-title">📧 Email — Gmail Setup</span>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;">
+            <input type="checkbox" id="email-enabled"> Enable email sending
+          </label>
+        </div>
+        <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="form-group">
+            <label>Gmail Address</label>
+            <input class="form-control" type="email" id="email-user" placeholder="yourstore@gmail.com">
+          </div>
+          <div class="form-group">
+            <label>Gmail App Password <a href="https://myaccount.google.com/apppasswords" target="_blank" style="font-size:0.78rem;color:#1a237e;">Get one here ↗</a></label>
+            <input class="form-control" type="password" id="email-pass" placeholder="16-character app password">
+          </div>
+          <div class="form-group">
+            <label>Store Name (shown in From:)</label>
+            <input class="form-control" type="text" id="email-fromname" placeholder="Mom and Pop">
+          </div>
+        </div>
+        <div style="padding:0 20px 16px;background:#e8f5e9;border-radius:0 0 8px 8px;margin:0 -0px;padding:12px 20px;">
+          <strong style="font-size:0.85rem;">📋 How to get a Gmail App Password:</strong>
+          <ol style="font-size:0.82rem;color:#444;margin:6px 0 0 16px;line-height:1.8;">
+            <li>Go to your Google Account → Security</li>
+            <li>Enable 2-Step Verification (if not already on)</li>
+            <li>Search for "App Passwords" → Create one for "Mail"</li>
+            <li>Copy the 16-character password and paste it above</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- SMS Settings -->
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header">
+          <span class="panel-title">📱 SMS — Twilio Setup</span>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;">
+            <input type="checkbox" id="sms-enabled"> Enable SMS sending
+          </label>
+        </div>
+        <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="form-group">
+            <label>Account SID</label>
+            <input class="form-control" type="text" id="sms-sid" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+          </div>
+          <div class="form-group">
+            <label>Auth Token</label>
+            <input class="form-control" type="password" id="sms-token" placeholder="Your Twilio Auth Token">
+          </div>
+          <div class="form-group">
+            <label>Twilio Phone Number</label>
+            <input class="form-control" type="text" id="sms-from" placeholder="+15551234567">
+          </div>
+        </div>
+        <div style="padding:12px 20px;background:#e3f2fd;border-radius:0 0 8px 8px;">
+          <strong style="font-size:0.85rem;">📋 How to get Twilio credentials (free trial):</strong>
+          <ol style="font-size:0.82rem;color:#444;margin:6px 0 0 16px;line-height:1.8;">
+            <li>Sign up free at <strong>twilio.com</strong> — get ~$15 trial credit</li>
+            <li>From the Console Dashboard, copy your <strong>Account SID</strong> and <strong>Auth Token</strong></li>
+            <li>Go to Phone Numbers → Buy a Number (~$1/month)</li>
+            <li>Enter the number above in E.164 format: <strong>+1XXXXXXXXXX</strong></li>
+          </ol>
+          <p style="font-size:0.82rem;color:#555;margin:8px 0 0;">Cost: ~$0.01 per SMS. 500 texts/month = ~$5.</p>
+        </div>
+      </div>
+
+      <!-- Test Buttons -->
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><span class="panel-title">🧪 Test Your Setup</span></div>
+        <div style="padding:20px;display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input class="form-control" type="email" id="test-email" placeholder="test@email.com" style="width:220px;">
+            <button class="btn btn-outline" onclick="testEmail()">📧 Send Test Email</button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input class="form-control" type="text" id="test-phone" placeholder="+15551234567" style="width:180px;">
+            <button class="btn btn-outline" onclick="testSms()">📱 Send Test SMS</button>
+          </div>
+        </div>
+        <div id="test-result" style="padding:0 20px 16px;font-size:0.88rem;display:none;"></div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/settings.js"></script>
+</body>
+</html>

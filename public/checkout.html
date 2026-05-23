@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Mom and Pop</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <script src="js/nav.js"></script>
+    <main class="main-content">
+      <div class="page-header">
+        <h1>🛒 Checkout / POS</h1>
+        <button class="btn btn-danger" onclick="clearCart()">Clear Cart</button>
+      </div>
+
+      <div class="checkout-layout">
+        <!-- Left: Scan + Cart -->
+        <div>
+          <div class="panel" style="padding:20px;">
+            <div class="form-group">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                <label style="margin-bottom:0;">Scan Barcode</label>
+                <span id="scanner-status" style="font-size:0.82rem;font-weight:600;color:#2e7d32;">🟢 Scanner Ready</span>
+              </div>
+              <div class="flex gap-2">
+                <input class="form-control" type="text" id="barcode-input" placeholder="Scan or type barcode, press Enter" autofocus style="border-color:#2e7d32;border-width:2px;">
+                <button class="btn btn-primary" onclick="scanBarcode()">Add</button>
+              </div>
+              <small style="color:#888;margin-top:4px;display:block;">Press <kbd style="background:#f0f0f0;padding:1px 5px;border-radius:3px;border:1px solid #ccc;">Esc</kbd> anytime to return focus to scanner</small>
+            </div>
+            <div class="form-group mt-1">
+              <label>Search Member by Phone</label>
+              <div class="flex gap-2">
+                <input class="form-control" type="text" id="phone-search"
+                  placeholder="Type phone number..." autocomplete="off">
+                <button class="btn btn-outline" onclick="searchByPhone()">Find</button>
+              </div>
+              <div id="phone-results" style="display:none;background:#fff;border:1.5px solid #ddd;border-radius:7px;margin-top:4px;max-height:160px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.08);"></div>
+            </div>
+            <div class="form-group">
+              <label>Member</label>
+              <select class="form-control" id="member-select">
+                <option value="">— Walk-in Customer —</option>
+              </select>
+              <div id="member-info" style="display:none;margin-top:6px;padding:8px 12px;background:#e8f5e9;border-radius:6px;font-size:0.88rem;color:#2e7d32;"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Cart Items</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Barcode</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="cart-tbody">
+                  <tr><td colspan="6" class="text-center" style="padding:24px;color:#aaa;">Cart is empty — scan a product</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Totals + Payment -->
+        <div class="panel" style="padding:24px;">
+          <h3 style="margin-bottom:16px;color:#1a237e;">Payment Summary</h3>
+
+          <!-- Payment Method -->
+          <div style="display:flex;gap:8px;margin-bottom:16px;">
+            <button id="btn-cash" class="pay-method-btn active" onclick="setPaymentMethod('cash')"
+              style="flex:1;padding:10px;border-radius:8px;border:2px solid #1a237e;background:#1a237e;color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem;">
+              💵 Cash
+            </button>
+            <button id="btn-credit_card" class="pay-method-btn" onclick="setPaymentMethod('credit_card')"
+              style="flex:1;padding:10px;border-radius:8px;border:2px solid #ddd;background:#fff;color:#444;font-weight:700;cursor:pointer;font-size:0.9rem;">
+              💳 Credit Card
+            </button>
+            <button id="btn-debit_card" class="pay-method-btn" onclick="setPaymentMethod('debit_card')"
+              style="flex:1;padding:10px;border-radius:8px;border:2px solid #ddd;background:#fff;color:#444;font-weight:700;cursor:pointer;font-size:0.9rem;">
+              🏦 Debit Card
+            </button>
+          </div>
+
+          <div class="cart-total-row">
+            <span>Subtotal</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+          <div class="cart-total-row">
+            <span>
+              Discount ($)
+              <input type="number" id="discount" value="0" min="0" step="0.01"
+                style="width:80px;padding:4px 8px;border:1.5px solid #ddd;border-radius:5px;margin-left:8px;"
+                oninput="recalc()">
+            </span>
+            <span id="discount-display">$0.00</span>
+          </div>
+          <div class="cart-total-row">
+            <span>
+              Tax (%) <small style="color:#888;font-size:0.75rem;">CA 10%</small>
+              <input type="number" id="tax" value="10" min="0" max="100" step="0.01"
+                style="width:60px;padding:4px 8px;border:1.5px solid #ddd;border-radius:5px;margin-left:8px;"
+                oninput="recalc()">
+            </span>
+            <span id="tax-display">$0.00</span>
+          </div>
+          <div class="cart-total-row grand">
+            <span>TOTAL</span>
+            <span id="grand-total">$0.00</span>
+          </div>
+
+          <!-- Cash fields (hidden for card) -->
+          <div id="cash-fields">
+            <div class="form-group mt-2">
+              <label>Amount Paid ($)</label>
+              <input class="form-control" type="number" id="amount-paid" min="0" step="0.01"
+                placeholder="0.00" oninput="calcChange()" style="font-size:1.3rem;padding:12px;">
+            </div>
+          </div>
+
+          <!-- Card instruction (hidden for cash) -->
+          <div id="card-fields" style="display:none;margin-top:16px;padding:14px;background:#e3f2fd;border-radius:8px;text-align:center;">
+            <div style="font-size:1.1rem;font-weight:700;color:#1565c0;">💳 Process on Card Terminal</div>
+            <div style="color:#555;margin-top:6px;font-size:0.9rem;">Enter the total amount shown above into your card machine, then click <strong>Confirm Payment</strong> after the card is approved.</div>
+          </div>
+
+          <div id="change-row" class="cart-total-row" style="font-size:1.1rem;">
+            <span>Change</span>
+            <span id="change-display" style="font-weight:700;color:#2e7d32;">$0.00</span>
+          </div>
+
+          <div id="pay-error" class="alert alert-error mt-1" style="display:none;"></div>
+
+          <button id="pay-btn" class="btn btn-success" style="width:100%;padding:14px;font-size:1rem;margin-top:16px;"
+            onclick="processPayment()">
+            ✅ Process Payment
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>
